@@ -58,13 +58,22 @@ function map_config {
 #
 
 
+#
+# import the number of workers
+#
+pCount=$1;
+: ${pCount:=1}
+
 
 
 #
 # import the dockman config
 #
 
-dockmanFile='.dockman.yml'
+
+dockmanFile=$2;
+: ${dockmanFile:='.dockman.yml'}
+
 
 if [ ! -f "$dockmanFile" ]; then
     echo "! Could not find $dockmanFile"
@@ -74,11 +83,6 @@ fi
 eval $(parse_yaml $dockmanFile) 
 
 
-#
-# import the number of workers
-#
-pCount=$1;
-: ${pCount:=1}
 
 
 #
