@@ -1,9 +1,9 @@
 namespace: docker-demo-2
 
 worker_container:
-    image: docker.robsquir.es/docker-demo-1
+    image: docker.robsquir.es/docker-demos-1
 
 client_container:
-    image: docker.robsquir.es/docker-demo-1
+    image: docker.robsquir.es/docker-demos-1
 
 

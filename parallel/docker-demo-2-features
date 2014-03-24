@@ -1,4 +1,4 @@
-features/4-lines-written-to-the-file.feature
-features/1-line-written-to-the-file.feature
-features/2-lines-written-to-the-file.feature
-features/3-lines-written-to-the-file.feature
+1,features/4-lines-written-to-the-file.feature,end
+2,features/1-line-written-to-the-file.feature,end
+3,features/2-lines-written-to-the-file.feature,end
+4,features/3-lines-written-to-the-file.feature,end

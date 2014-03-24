@@ -104,20 +104,17 @@ map_config 'worker_container__image' 'worker_cnt_image'
 
 file=$namespace-features
 
-docker run -t -i -rm $worker_cnt_image find features -type f -name "*.feature" > $file
-
-#list=`cd /Users/rob/Projects/UVd/LimpidMarkets/backend.git; tree -a  -if --noreport  features/  | grep .feature$`
-
-#ouch
-
-while read i; do
-  echo $i
+docker run -t -i -rm $worker_cnt_image ./collector.sh > $file
+IFS=$'\n'
+for i in $(cat $file) ; do
+  k=$(echo "$i" | awk -F',' '{print $2}')
+  echo "$k"
   sem --gnu -j $pCount \
-    docker run -t -i -e TEST_TOKEN=1 \
+    docker run -t -i -e TEST="$k" \
     -rm \
     $worker_cnt_image \
-    $base_cnt_cmd "$i"
-done < $file
+    ./bin/behat "$k"
+done
 sem --gnu --wait
 
 date
