@@ -109,10 +109,7 @@ for i in $(cat $file) ; do
   k=$(echo "$i" | awk -F',' '{print $2}')
   sem --gnu -j $pCount \
     docker run -t -i -e TEST="$k" \
-    -rm \
     $worker_cnt_image \
     ./bin/behat "$k"
 done
 sem --gnu --wait
-
-date
