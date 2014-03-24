@@ -105,10 +105,8 @@ map_config 'worker_container__image' 'worker_cnt_image'
 file=$namespace-features
 
 docker run -t -i -rm $worker_cnt_image ./collector.sh > $file
-IFS=$'\n'
 for i in $(cat $file) ; do
   k=$(echo "$i" | awk -F',' '{print $2}')
-  echo "$k"
   sem --gnu -j $pCount \
     docker run -t -i -e TEST="$k" \
     -rm \
