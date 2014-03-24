@@ -110,8 +110,8 @@ for i in $(cat $file) ; do
   test=$(echo "$i" | awk -F',' '{print $2}')
   id=$(echo "$i" | awk -F',' '{print $1}')
   sem --gnu -j $pCount \
-    docker run -t -i -e TEST="$test" -e TEST_TOKEN="$id" \
+    docker run -t -i -e TEST_TOKEN="$id" \
     $worker_cnt_image \
-    ./bin/behat "$k"
+    ./runner.sh "$test"
 done
 sem --wait
