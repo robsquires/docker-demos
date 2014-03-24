@@ -107,9 +107,10 @@ file=$namespace-features
 docker run -t -i $worker_cnt_image ./collector.sh > $file
 
 for i in $(cat $file) ; do
-  k=$(echo "$i" | awk -F',' '{print $2}')
+  test=$(echo "$i" | awk -F',' '{print $2}')
+  id=$(echo "$i" | awk -F',' '{print $1}')
   sem --gnu -j $pCount \
-    docker run -t -i -e TEST="$k" \
+    docker run -t -i -e TEST="$test" -e TEST_TOKEN="$id" \
     $worker_cnt_image \
     ./bin/behat "$k"
 done
