@@ -104,7 +104,8 @@ map_config 'worker_container__image' 'worker_cnt_image'
 
 file=$namespace-features
 
-docker run -t -i -rm $worker_cnt_image ./collector.sh > $file
+docker run -t -i $worker_cnt_image ./collector.sh > $file
+
 for i in $(cat $file) ; do
   k=$(echo "$i" | awk -F',' '{print $2}')
   sem --gnu -j $pCount \
@@ -112,4 +113,4 @@ for i in $(cat $file) ; do
     $worker_cnt_image \
     ./bin/behat "$k"
 done
-sem --gnu --wait
+sem --wait
