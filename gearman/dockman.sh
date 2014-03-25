@@ -101,10 +101,6 @@ gearman_cnt_image='rgarcia/gearmand'
 gearman_cnt_name=$cnt_namespace.gearman
 
 
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
-
-
 
 #remove_container $gearman_cnt_name
 
@@ -121,7 +117,7 @@ gearman_link_name=$gearman_cnt_name:$gearman_link_alias
 #
 # dockman-behat config
 # 
-base_cnt_cmd="./env.sh"
+base_cnt_cmd="./bootstrap.sh"
 
 
 #
@@ -132,7 +128,7 @@ echo "-> SETTING UP $pCount WORKER CONTAINERS......."
 map_config 'worker_container__image' 'worker_cnt_image'
 
 worker_cnt_prefix=$cnt_namespace.worker-
-worker_cnt_cmd="$base_cnt_cmd behat-worker.yml"
+worker_cnt_cmd="$base_cnt_cmd worker"
 
 #for  i in $(docker ps -a | grep -o "$worker_cnt_prefix[0-9]+(?!/)")
 #  do
@@ -144,7 +140,7 @@ for (( i=1; i<=$pCount; i++ ))
 do
     worker_cnt_name=$worker_cnt_prefix$i
     echo "--> Creating worker container: $worker_cnt_name"
-    docker run -d --link $gearman_link_name  -name $worker_cnt_name $worker_cnt_image $worker_cnt_cmd
+    docker run -d -t --link $gearman_link_name -e TEST_TOKEN=$i -name $worker_cnt_name $worker_cnt_image $worker_cnt_cmd
 done
 
 
@@ -156,7 +152,7 @@ echo "-> SETTING UP CLIENT CONTAINER + RUNNING TESTS......."
 map_config 'client_container__image' 'client_cnt_image'
 
 client_cnt_name=$cnt_namespace.client
-client_cnt_cmd="$base_cnt_cmd behat-client.yml"
+client_cnt_cmd="$base_cnt_cmd client"
 
 #for  i in $(docker ps -a | grep -o "$client_cnt_name(?!/)")
 #  do
@@ -166,4 +162,10 @@ client_cnt_cmd="$base_cnt_cmd behat-client.yml"
 
 echo "--> Creating client container: $client_cnt_name"
 docker run -t -i -rm --link $gearman_link_name -name $client_cnt_name $client_cnt_image $client_cnt_cmd
+
+
+echo "Done...cleaning up containers"
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
 
