@@ -105,7 +105,7 @@ gearman_cnt_name=$cnt_namespace.gearman
 #remove_container $gearman_cnt_name
 
 echo "--> Starting container: $gearman_cnt_name"
-docker run -d -name $gearman_cnt_name $gearman_cnt_image
+docker run -d -name $gearman_cnt_name $gearman_cnt_image &>/dev/null
 
 #gearman link names
 
@@ -140,7 +140,7 @@ for (( i=1; i<=$pCount; i++ ))
 do
     worker_cnt_name=$worker_cnt_prefix$i
     echo "--> Creating worker container: $worker_cnt_name"
-    docker run -d -t --link $gearman_link_name -e TEST_TOKEN=$i -name $worker_cnt_name $worker_cnt_image $worker_cnt_cmd
+    docker run -d -t --link $gearman_link_name -e TEST_TOKEN=$i -name $worker_cnt_name $worker_cnt_image $worker_cnt_cmd &>/dev/null
 done
 
 
